@@ -6,28 +6,30 @@ import TextField from "../../components/TextField";
 import { editEmployee } from "./employeeSlice";
 
 const EditEmployee = () => {
-  const params = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const employees = useSelector((store) => store.employees);
   const navigate = useNavigate();
-  const existingEmployee = employees.filter(
-    (employee) => employee.id === params.id
-  );
-  const { name, email } = existingEmployee[0];
+
+  const employees = useSelector((store) => store.employees);
+
+  const existingEmployee = employees.find((employee) => employee.id === id);
+
   const [values, setValues] = useState({
-    name,
-    email,
+    name: existingEmployee?.name || "",
+    email: existingEmployee?.email || "",
   });
 
   const handleEditEmployee = () => {
-    setValues({ name: "", email: "" });
+    if (!values.name || !values.email) return;
+
     dispatch(
       editEmployee({
-        id: params.id,
+        id,
         name: values.name,
         email: values.email,
-      })
+      }),
     );
+
     navigate("/");
   };
 
@@ -39,13 +41,16 @@ const EditEmployee = () => {
         onChange={(e) => setValues({ ...values, name: e.target.value })}
         inputProps={{ type: "text", placeholder: "Jhon Doe" }}
       />
+
       <br />
+
       <TextField
         label="Email"
         value={values.email}
         onChange={(e) => setValues({ ...values, email: e.target.value })}
         inputProps={{ type: "email", placeholder: "jhondoe@mail.com" }}
       />
+
       <Button onClick={handleEditEmployee}>Edit</Button>
     </div>
   );

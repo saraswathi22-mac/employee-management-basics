@@ -9,20 +9,24 @@ import { addEmployee } from "./employeeSlice";
 const AddEmployee = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [values, setValues] = useState({
     name: "",
     email: "",
   });
 
   const handleAddEmployee = () => {
-    setValues({ name: "", email: "" });
+    if (!values.name || !values.email) return;
+
     dispatch(
       addEmployee({
         id: uuidv4(),
         name: values.name,
         email: values.email,
-      })
+      }),
     );
+
+    setValues({ name: "", email: "" });
     navigate("/");
   };
 
@@ -34,13 +38,16 @@ const AddEmployee = () => {
         onChange={(e) => setValues({ ...values, name: e.target.value })}
         inputProps={{ type: "text", placeholder: "Jhon Doe" }}
       />
+
       <br />
+
       <TextField
         label="Email"
         value={values.email}
         onChange={(e) => setValues({ ...values, email: e.target.value })}
         inputProps={{ type: "email", placeholder: "jhondoe@mail.com" }}
       />
+
       <Button onClick={handleAddEmployee}>Submit</Button>
     </div>
   );

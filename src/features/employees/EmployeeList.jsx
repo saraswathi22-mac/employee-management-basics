@@ -21,8 +21,9 @@ const EmployeeList = () => {
           <h3 className="font-bold text-lg text-gray-700">{employee.name}</h3>
           <span className="font-normal text-gray-600">{employee.email}</span>
         </div>
+
         <div className="flex gap-4">
-          <Link to={`edit-employee/${employee.id}`}>
+          <Link to={`/edit-employee/${employee.id}`}>
             <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -40,6 +41,7 @@ const EmployeeList = () => {
               </svg>
             </button>
           </Link>
+
           <button onClick={() => handleRemoveEmployee(employee.id)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,6 +67,7 @@ const EmployeeList = () => {
       <Link to="/add-employee">
         <Button>Add Employee</Button>
       </Link>
+
       <div className="grid gap-5 md:grid-cols-2">
         {employees.length ? (
           renderCard()

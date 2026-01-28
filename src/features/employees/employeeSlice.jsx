@@ -19,14 +19,12 @@ const employeeSlice = createSlice({
     },
     deleteEmployee: (state, action) => {
       const { id } = action.payload;
-      const existingEmployee = state.find((employee) => employee.id === id);
-      if (existingEmployee) {
-        return state.filter((employee) => employee.id !== id);
-      }
+      return state.filter((employee) => employee.id !== id);
     },
   },
 });
 
 export const { addEmployee, editEmployee, deleteEmployee } =
   employeeSlice.actions;
+
 export default employeeSlice.reducer;
