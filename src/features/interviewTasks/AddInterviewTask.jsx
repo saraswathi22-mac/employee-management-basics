@@ -10,45 +10,49 @@ const AddInterviewTask = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const today = new Date().toISOString().split("T")[0];
+
   const [values, setValues] = useState({
-    name: "",
-    email: "",
+    question: "",
+    techStack: "React",
+    type: "theory",
+    difficulty: "medium",
+    estimatedTime: 30,
   });
 
-  const handleAddInterviewTask = () => {
-    if (!values.name || !values.email) return;
+  const handleAddTask = () => {
+    if (!values.question) return;
 
     dispatch(
       addInterviewTask({
         id: uuidv4(),
-        name: values.name,
-        email: values.email,
-      }),
+        date: today,
+        weekId: "2026-W01",
+        ...values,
+        status: "todo",
+        isRolledOver: false,
+        notes: "",
+        confidenceLevel: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
     );
 
-    setValues({ name: "", email: "" });
     navigate("/");
   };
 
   return (
     <div className="mt-10 max-w-xl mx-auto">
       <TextField
-        label="Name"
-        value={values.name}
-        onChange={(e) => setValues({ ...values, name: e.target.value })}
-        inputProps={{ type: "text", placeholder: "Jhon Doe" }}
+        label="Interview Question"
+        value={values.question}
+        onChange={(e) =>
+          setValues({ ...values, question: e.target.value })
+        }
+        inputProps={{ placeholder: "Explain useEffect cleanup" }}
       />
 
-      <br />
-
-      <TextField
-        label="Email"
-        value={values.email}
-        onChange={(e) => setValues({ ...values, email: e.target.value })}
-        inputProps={{ type: "email", placeholder: "jhondoe@mail.com" }}
-      />
-
-      <Button onClick={handleAddInterviewTask}>Submit</Button>
+      <Button onClick={handleAddTask}>Add Task</Button>
     </div>
   );
 };

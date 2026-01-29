@@ -10,24 +10,32 @@ const EditInterviewTask = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const interviewTasks = useSelector((store) => store.interviewTasks);
+  const interviewTasks = useSelector(
+    (store) => store.interviewTasks
+  );
 
-  const existingInterviewTask = interviewTasks.find((interviewTask) => interviewTask.id === id);
+  const existingInterviewTask = interviewTasks.find(
+    (task) => task.id === id
+  );
 
   const [values, setValues] = useState({
-    name: existingInterviewTask?.name || "",
-    email: existingInterviewTask?.email || "",
+    question: existingInterviewTask?.question || "",
+    techStack: existingInterviewTask?.techStack || "React",
+    difficulty: existingInterviewTask?.difficulty || "medium",
   });
 
   const handleEditInterviewTask = () => {
-    if (!values.name || !values.email) return;
+    if (!values.question) return;
 
     dispatch(
       editInterviewTask({
         id,
-        name: values.name,
-        email: values.email,
-      }),
+        updates: {
+          question: values.question,
+          techStack: values.techStack,
+          difficulty: values.difficulty,
+        },
+      })
     );
 
     navigate("/");
@@ -36,22 +44,19 @@ const EditInterviewTask = () => {
   return (
     <div className="mt-10 max-w-xl mx-auto">
       <TextField
-        label="Name"
-        value={values.name}
-        onChange={(e) => setValues({ ...values, name: e.target.value })}
-        inputProps={{ type: "text", placeholder: "Jhon Doe" }}
+        label="Interview Question"
+        value={values.question}
+        onChange={(e) =>
+          setValues({ ...values, question: e.target.value })
+        }
+        inputProps={{
+          type: "text",
+          placeholder: "Explain useEffect cleanup",
+        }}
       />
 
-      <br />
-
-      <TextField
-        label="Email"
-        value={values.email}
-        onChange={(e) => setValues({ ...values, email: e.target.value })}
-        inputProps={{ type: "email", placeholder: "jhondoe@mail.com" }}
-      />
-
-      <Button onClick={handleEditInterviewTask}>Edit</Button>
+      {/* UI dropdowns will come next */}
+      <Button onClick={handleEditInterviewTask}>Edit Task</Button>
     </div>
   );
 };

@@ -4,7 +4,7 @@ const loadInitialState = () => {
   try {
     const data = localStorage.getItem("interviewTasks");
     return data ? JSON.parse(data) : [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -18,21 +18,19 @@ const interviewTaskSlice = createSlice({
     addInterviewTask: (state, action) => {
       state.push(action.payload);
     },
+
     editInterviewTask: (state, action) => {
-      const { id, name, email } = action.payload;
-      const existingInterviewTask = state.find(
-        (interviewTask) => interviewTask.id === id
-      );
-      if (existingInterviewTask) {
-        existingInterviewTask.name = name;
-        existingInterviewTask.email = email;
+      const { id, updates } = action.payload;
+      const task = state.find((t) => t.id === id);
+      if (task) {
+        Object.assign(task, updates, {
+          updatedAt: new Date().toISOString(),
+        });
       }
     },
+
     deleteInterviewTask: (state, action) => {
-      const { id } = action.payload;
-      return state.filter(
-        (interviewTask) => interviewTask.id !== id
-      );
+      return state.filter((t) => t.id !== action.payload.id);
     },
   },
 });
