@@ -9,16 +9,24 @@ import {
 } from "./interviewTaskSlice";
 
 const InterviewTaskList = () => {
+  const [showWeeklySummary, setShowWeeklySummary] = useState(false);
   const dispatch = useDispatch();
   const interviewTasks = useSelector((store) => store.interviewTasks);
 
   // -------- Dates --------
-  const today = new Date().toISOString().split("T")[0];
-
+  const getLocalDate = () => {
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    const local = new Date(now.getTime() - offset * 60 * 1000);
+    return local.toISOString().split("T")[0];
+  };
+  const today = getLocalDate();
   const getYesterday = () => {
-    const d = new Date();
-    d.setDate(d.getDate() - 1);
-    return d.toISOString().split("T")[0];
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    const local = new Date(now.getTime() - offset * 60 * 1000);
+    local.setDate(local.getDate() - 1);
+    return local.toISOString().split("T")[0];
   };
 
   const yesterday = getYesterday();
@@ -80,42 +88,39 @@ const InterviewTaskList = () => {
   };
 
   // -------- Weekly Summary Helpers --------
-const getWeekId = (dateStr) => {
-  const date = new Date(dateStr);
-  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-  const pastDays = Math.floor(
-    (date - firstDayOfYear) / (24 * 60 * 60 * 1000)
+  const getWeekId = (dateStr) => {
+    const date = new Date(dateStr);
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDays = Math.floor(
+      (date - firstDayOfYear) / (24 * 60 * 60 * 1000),
+    );
+    const week = Math.ceil((pastDays + firstDayOfYear.getDay() + 1) / 7);
+    return `${date.getFullYear()}-W${week}`;
+  };
+
+  const currentWeekId = getWeekId(today);
+
+  // -------- Weekly Aggregation --------
+  const weeklyTasks = interviewTasks.filter(
+    (task) => getWeekId(task.date) === currentWeekId,
   );
-  const week = Math.ceil(
-    (pastDays + firstDayOfYear.getDay() + 1) / 7
-  );
-  return `${date.getFullYear()}-W${week}`;
-};
 
-const currentWeekId = getWeekId(today);
+  const weeklyStats = {
+    total: weeklyTasks.length,
+    done: weeklyTasks.filter((t) => t.status === "done").length,
+    skipped: weeklyTasks.filter((t) => t.status === "skipped").length,
+    todo: weeklyTasks.filter((t) => t.status === "todo").length,
+  };
 
-// -------- Weekly Aggregation --------
-const weeklyTasks = interviewTasks.filter(
-  (task) => getWeekId(task.date) === currentWeekId
-);
+  const techStackStats = weeklyTasks.reduce((acc, task) => {
+    acc[task.techStack] = (acc[task.techStack] || 0) + 1;
+    return acc;
+  }, {});
 
-const weeklyStats = {
-  total: weeklyTasks.length,
-  done: weeklyTasks.filter((t) => t.status === "done").length,
-  skipped: weeklyTasks.filter((t) => t.status === "skipped").length,
-  todo: weeklyTasks.filter((t) => t.status === "todo").length,
-};
-
-const techStackStats = weeklyTasks.reduce((acc, task) => {
-  acc[task.techStack] = (acc[task.techStack] || 0) + 1;
-  return acc;
-}, {});
-
-const difficultyStats = weeklyTasks.reduce((acc, task) => {
-  acc[task.difficulty] = (acc[task.difficulty] || 0) + 1;
-  return acc;
-}, {});
-
+  const difficultyStats = weeklyTasks.reduce((acc, task) => {
+    acc[task.difficulty] = (acc[task.difficulty] || 0) + 1;
+    return acc;
+  }, {});
 
   // -------- UI --------
   return (
@@ -255,85 +260,85 @@ const difficultyStats = weeklyTasks.reduce((acc, task) => {
           <p className="text-gray-600 mt-6">No interview tasks for this date</p>
         )}
       </div>
-      <div className="mt-10 bg-gray-100 p-5 rounded">
-  <h2 className="text-lg font-semibold text-gray-800">
-    Weekly Summary ({currentWeekId})
-  </h2>
+      <h2 className="text-lg font-semibold text-gray-800">
+        Weekly Summary ({currentWeekId})
+      </h2>
 
-  <p className="text-sm text-gray-600 mt-1">
-    Total Tasks: {weeklyStats.total}
-  </p>
+      <button
+        onClick={() => setShowWeeklySummary((prev) => !prev)}
+        className="text-sm text-blue-600"
+      >
+        {showWeeklySummary ? "Hide summary" : "Show summary"}
+      </button>
+      {showWeeklySummary && (
+        <div className="mt-10 bg-gray-100 p-5 rounded">
+          <p className="text-sm text-gray-600 mt-1">
+            Total Tasks: {weeklyStats.total}
+          </p>
 
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-    <div>
-      <p className="text-sm font-medium">Done</p>
-      <p className="text-lg font-bold text-green-600">
-        {weeklyStats.done}
-      </p>
-    </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+            <div>
+              <p className="text-sm font-medium">Done</p>
+              <p className="text-lg font-bold text-green-600">
+                {weeklyStats.done}
+              </p>
+            </div>
 
-    <div>
-      <p className="text-sm font-medium">Skipped</p>
-      <p className="text-lg font-bold text-yellow-600">
-        {weeklyStats.skipped}
-      </p>
-    </div>
+            <div>
+              <p className="text-sm font-medium">Skipped</p>
+              <p className="text-lg font-bold text-yellow-600">
+                {weeklyStats.skipped}
+              </p>
+            </div>
 
-    <div>
-      <p className="text-sm font-medium">Pending</p>
-      <p className="text-lg font-bold text-gray-600">
-        {weeklyStats.todo}
-      </p>
-    </div>
+            <div>
+              <p className="text-sm font-medium">Pending</p>
+              <p className="text-lg font-bold text-gray-600">
+                {weeklyStats.todo}
+              </p>
+            </div>
 
-    <div>
-      <p className="text-sm font-medium">Completion</p>
-      <p className="text-lg font-bold text-blue-600">
-        {weeklyStats.total === 0
-          ? "0%"
-          : `${Math.round(
-              (weeklyStats.done / weeklyStats.total) * 100
-            )}%`}
-      </p>
-    </div>
-  </div>
+            <div>
+              <p className="text-sm font-medium">Completion</p>
+              <p className="text-lg font-bold text-blue-600">
+                {weeklyStats.total === 0
+                  ? "0%"
+                  : `${Math.round(
+                      (weeklyStats.done / weeklyStats.total) * 100,
+                    )}%`}
+              </p>
+            </div>
+          </div>
 
-  {/* Tech Stack */}
-  <div className="mt-6">
-    <h3 className="font-medium text-gray-700">
-      Tech Stack Coverage
-    </h3>
-    <ul className="text-sm mt-2">
-      {Object.entries(techStackStats).map(
-        ([stack, count]) => (
-          <li key={stack}>
-            {stack}: {count}
-          </li>
-        )
+          {/* Tech Stack */}
+          <div className="mt-6">
+            <h3 className="font-medium text-gray-700">Tech Stack Coverage</h3>
+            <ul className="text-sm mt-2">
+              {Object.entries(techStackStats).map(([stack, count]) => (
+                <li key={stack}>
+                  {stack}: {count}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Difficulty */}
+          <div className="mt-4">
+            <h3 className="font-medium text-gray-700">
+              Difficulty Distribution
+            </h3>
+            <ul className="text-sm mt-2">
+              {Object.entries(difficultyStats).map(([level, count]) => (
+                <li key={level}>
+                  {level}: {count}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       )}
-    </ul>
-  </div>
-
-  {/* Difficulty */}
-  <div className="mt-4">
-    <h3 className="font-medium text-gray-700">
-      Difficulty Distribution
-    </h3>
-    <ul className="text-sm mt-2">
-      {Object.entries(difficultyStats).map(
-        ([level, count]) => (
-          <li key={level}>
-            {level}: {count}
-          </li>
-        )
-      )}
-    </ul>
-  </div>
-</div>
-
     </div>
-  
-);
+  );
 };
 
 export default InterviewTaskList;
