@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Button from "../../components/Button";
 import TextField from "../../components/TextField";
-import { addEmployee } from "./employeeSlice";
+import { addInterviewTask } from "./interviewTaskSlice";
 
-const AddEmployee = () => {
+const AddInterviewTask = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -15,11 +15,11 @@ const AddEmployee = () => {
     email: "",
   });
 
-  const handleAddEmployee = () => {
+  const handleAddInterviewTask = () => {
     if (!values.name || !values.email) return;
 
     dispatch(
-      addEmployee({
+      addInterviewTask({
         id: uuidv4(),
         name: values.name,
         email: values.email,
@@ -48,9 +48,9 @@ const AddEmployee = () => {
         inputProps={{ type: "email", placeholder: "jhondoe@mail.com" }}
       />
 
-      <Button onClick={handleAddEmployee}>Submit</Button>
+      <Button onClick={handleAddInterviewTask}>Submit</Button>
     </div>
   );
 };
 
-export default AddEmployee;
+export default AddInterviewTask;

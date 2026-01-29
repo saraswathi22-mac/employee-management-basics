@@ -3,27 +3,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import TextField from "../../components/TextField";
-import { editEmployee } from "./employeeSlice";
+import { editInterviewTask } from "./interviewTaskSlice";
 
-const EditEmployee = () => {
+const EditInterviewTask = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const employees = useSelector((store) => store.employees);
+  const interviewTasks = useSelector((store) => store.interviewTasks);
 
-  const existingEmployee = employees.find((employee) => employee.id === id);
+  const existingInterviewTask = interviewTasks.find((interviewTask) => interviewTask.id === id);
 
   const [values, setValues] = useState({
-    name: existingEmployee?.name || "",
-    email: existingEmployee?.email || "",
+    name: existingInterviewTask?.name || "",
+    email: existingInterviewTask?.email || "",
   });
 
-  const handleEditEmployee = () => {
+  const handleEditInterviewTask = () => {
     if (!values.name || !values.email) return;
 
     dispatch(
-      editEmployee({
+      editInterviewTask({
         id,
         name: values.name,
         email: values.email,
@@ -51,9 +51,9 @@ const EditEmployee = () => {
         inputProps={{ type: "email", placeholder: "jhondoe@mail.com" }}
       />
 
-      <Button onClick={handleEditEmployee}>Edit</Button>
+      <Button onClick={handleEditInterviewTask}>Edit</Button>
     </div>
   );
 };
 
-export default EditEmployee;
+export default EditInterviewTask;

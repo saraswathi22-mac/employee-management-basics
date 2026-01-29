@@ -1,29 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button";
-import { deleteEmployee } from "./employeeSlice";
+import { deleteInterviewTask } from "./interviewTaskSlice";
 
-const EmployeeList = () => {
+const InterviewTaskList = () => {
   const dispatch = useDispatch();
-  const employees = useSelector((store) => store.employees);
+  const interviewTasks = useSelector((store) => store.interviewTasks);
 
-  const handleRemoveEmployee = (id) => {
-    dispatch(deleteEmployee({ id }));
+  const handleRemoveInterviewTask = (id) => {
+    dispatch(deleteInterviewTask({ id }));
   };
 
   const renderCard = () =>
-    employees.map((employee) => (
+    interviewTasks.map((interviewTask) => (
       <div
         className="bg-gray-300 p-5 flex items-center justify-between"
-        key={employee.id}
+        key={interviewTask.id}
       >
         <div>
-          <h3 className="font-bold text-lg text-gray-700">{employee.name}</h3>
-          <span className="font-normal text-gray-600">{employee.email}</span>
+          <h3 className="font-bold text-lg text-gray-700">{interviewTask.name}</h3>
+          <span className="font-normal text-gray-600">{interviewTask.email}</span>
         </div>
 
         <div className="flex gap-4">
-          <Link to={`/edit-employee/${employee.id}`}>
+          <Link to={`/edit-task/${interviewTask.id}`}>
             <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +42,7 @@ const EmployeeList = () => {
             </button>
           </Link>
 
-          <button onClick={() => handleRemoveEmployee(employee.id)}>
+          <button onClick={() => handleRemoveInterviewTask(interviewTask.id)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -64,16 +64,16 @@ const EmployeeList = () => {
 
   return (
     <div>
-      <Link to="/add-employee">
-        <Button>Add Employee</Button>
+      <Link to="/add-task">
+        <Button>Add Interview Task</Button>
       </Link>
 
       <div className="grid gap-5 md:grid-cols-2">
-        {employees.length ? (
+        {interviewTasks.length ? (
           renderCard()
         ) : (
           <p className="text-center col-span-2 text-gray-700 font-semibold">
-            No Employee
+            No Interview Task
           </p>
         )}
       </div>
@@ -81,4 +81,4 @@ const EmployeeList = () => {
   );
 };
 
-export default EmployeeList;
+export default InterviewTaskList;
