@@ -35,24 +35,50 @@ const AddInterviewTask = () => {
         confidenceLevel: 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      })
+      }),
     );
 
     navigate("/");
   };
 
   return (
-    <div className="mt-10 max-w-xl mx-auto">
-      <TextField
-        label="Interview Question"
-        value={values.question}
-        onChange={(e) =>
-          setValues({ ...values, question: e.target.value })
-        }
-        inputProps={{ placeholder: "Explain useEffect cleanup" }}
-      />
+    <div className="mt-12 max-w-xl mx-auto">
+      {/* Card */}
+      <div className="bg-white shadow-sm border rounded-lg p-6">
+        {/* Heading */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Add Interview Task
+          </h2>
+        </div>
 
-      <Button onClick={handleAddTask}>Add Task</Button>
+        {/* Input */}
+        <div className="mb-6">
+          <TextField
+            label="Interview Question"
+            value={values.question}
+            onChange={(e) => setValues({ ...values, question: e.target.value })}
+            inputProps={{
+              placeholder: "Explain useEffect cleanup with an example",
+            }}
+          />
+
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-end gap-3">
+          <button
+            onClick={() => navigate("/")}
+            className="text-sm text-gray-600 hover:text-gray-800"
+          >
+            Cancel
+          </button>
+
+          <Button onClick={handleAddTask} disabled={!values.question.trim()}>
+            Add Task
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
