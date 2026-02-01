@@ -155,7 +155,7 @@ const InterviewTaskList = () => {
 
       {/* Weekly Summary */}
       <div className="pt-8 border-t">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold text-gray-800">
             Weekly Summary
             <span className="ml-2 text-sm font-normal text-gray-500">
