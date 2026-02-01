@@ -5,10 +5,20 @@ import InterviewTaskList from "./features/interviewTasks/InterviewTaskList";
 
 function App() {
   return (
-    <div className="container mx-auto px-2 max-w-5xl pt-10 md:pt-32">
-      <h1 className="text-center font-bold text-2xl text-gray-700">
-        Interview Task Management
-      </h1>
+    <div className="container mx-auto max-w-5xl px-3 pt-10 md:pt-28">
+      {/* App Header */}
+      <header className="mb-10 text-center">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+          Interview Prep Planner
+        </h1>
+
+        <p className="mt-2 text-sm md:text-base text-gray-600">
+          Plan daily interview questions, track progress, and review weekly
+          performance
+        </p>
+      </header>
+
+      {/* Routes */}
       <Routes>
         <Route path="/" element={<InterviewTaskList />} />
         <Route path="/add-task" element={<AddInterviewTask />} />
