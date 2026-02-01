@@ -15,9 +15,7 @@ const AddInterviewTask = () => {
   const [values, setValues] = useState({
     question: "",
     techStack: "React",
-    type: "theory",
     difficulty: "medium",
-    estimatedTime: 30,
   });
 
   const handleAddTask = () => {
@@ -62,7 +60,6 @@ const AddInterviewTask = () => {
               placeholder: "Explain useEffect cleanup with an example",
             }}
           />
-
         </div>
 
         {/* Actions */}

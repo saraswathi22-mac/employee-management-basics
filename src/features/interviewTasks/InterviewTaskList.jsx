@@ -109,12 +109,10 @@ const InterviewTaskList = () => {
 
       {/* Daily Progress */}
       {isToday && (
-        <div className="max-w-3xl">
-          <DailyProgress
-            completed={completedTasks}
-            total={filteredTasks.length}
-          />
-        </div>
+        <DailyProgress
+          completed={completedTasks}
+          total={filteredTasks.length}
+        />
       )}
 
       {/* Section Header */}
