@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 
 const TaskCard = ({ task, isPastDay, onStatusChange, onDelete }) => {
-  console.log(task)
   const techStack = task.techStack;
   const difficulty = task.difficulty;
-console.log('a',task)
+
   return (
     <div
       className={`rounded-lg border p-4 flex justify-between gap-4 ${
@@ -21,13 +20,9 @@ console.log('a',task)
 
         {/* Tech stack + difficulty */}
         <div className="flex items-center gap-2 text-sm text-gray-600">
-          <span className="px-2 py-0.5 rounded bg-gray-100">
-            {techStack}
-          </span>
+          <span className="px-2 py-0.5 rounded bg-gray-100">{techStack}</span>
           <span className="text-gray-400">•</span>
-          <span className="capitalize">
-            {difficulty}
-          </span>
+          <span className="capitalize">{difficulty}</span>
         </div>
 
         {/* Status */}
@@ -38,8 +33,8 @@ console.log('a',task)
               task.status === "done"
                 ? "text-green-600"
                 : task.status === "skipped"
-                ? "text-yellow-600"
-                : "text-gray-700"
+                  ? "text-yellow-600"
+                  : "text-gray-700"
             }`}
           >
             {task.status}
@@ -53,9 +48,7 @@ console.log('a',task)
         )}
 
         {isPastDay && (
-          <p className="text-xs text-gray-500">
-            🔒 Read-only (past day)
-          </p>
+          <p className="text-xs text-gray-500">🔒 Read-only (past day)</p>
         )}
       </div>
 
