@@ -146,15 +146,18 @@ const InterviewTaskList = () => {
             />
           ))
         ) : (
-          <div className="border border-dashed rounded-xl p-8 text-center bg-gray-50">
-            <p className="text-gray-600 font-medium">
-              No tasks for this date
+          <div className="border border-dashed rounded-xl p-10 text-center bg-gradient-to-br from-gray-50 to-gray-100">
+            <div className="text-4xl mb-3">📝</div>
+
+            <h3 className="text-lg font-semibold text-gray-700">
+              No tasks for this day
+            </h3>
+
+            <p className="text-sm text-gray-500 mt-2">
+              {isToday
+                ? "Start your interview prep by adding your first task 🚀"
+                : "No tasks were planned for this date"}
             </p>
-            {isToday && (
-              <p className="text-sm text-gray-500 mt-2">
-                Start by adding your first interview question ✨
-              </p>
-            )}
           </div>
         )}
       </div>
