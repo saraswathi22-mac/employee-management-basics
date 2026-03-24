@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 
 const TaskCard = ({ task, isPastDay, onStatusChange, onDelete }) => {
-  const { techStack, difficulty, status } = task;
+  const { techStack, status } = task;
 
-  // 🎨 Difficulty color
-  const difficultyColor = {
-    easy: "bg-green-100 text-green-700",
+  const priority = task.priority || "medium";
+
+  // 🎨 Priority color
+  const priorityColor = {
+    high: "bg-red-100 text-red-700",
     medium: "bg-yellow-100 text-yellow-700",
-    hard: "bg-red-100 text-red-700",
+    low: "bg-green-100 text-green-700",
   };
 
   // 🎨 Status color
@@ -32,18 +34,19 @@ const TaskCard = ({ task, isPastDay, onStatusChange, onDelete }) => {
           {task.question}
         </h3>
 
-        {/* Tech + Difficulty */}
+        {/* Tech + Priority */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">
             {techStack}
           </span>
 
+          {/* ✅ PRIORITY BADGE */}
           <span
             className={`px-2 py-0.5 rounded-md font-medium capitalize ${
-              difficultyColor[difficulty] || "bg-gray-100 text-gray-600"
+              priorityColor[priority] || "bg-gray-100 text-gray-600"
             }`}
           >
-            {difficulty}
+            {priority}
           </span>
         </div>
 

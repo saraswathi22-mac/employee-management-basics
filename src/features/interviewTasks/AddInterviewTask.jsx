@@ -16,7 +16,7 @@ const AddInterviewTask = () => {
   const [values, setValues] = useState({
     question: "",
     techStack: "React",
-    difficulty: "medium",
+    priority: "medium",
   });
 
   const handleAddTask = () => {
@@ -29,7 +29,7 @@ const AddInterviewTask = () => {
         weekId: getWeekId(today),
         question: values.question,
         techStack: values.techStack,
-        difficulty: values.difficulty,
+        priority: values.priority, // ✅ NEW
         status: "todo",
         isRolledOver: false,
         createdAt: new Date().toISOString(),
@@ -83,12 +83,7 @@ const AddInterviewTask = () => {
                 onChange={(e) =>
                   setValues({ ...values, techStack: e.target.value })
                 }
-                className="
-                  rounded-lg border border-gray-300 px-3 py-2 text-sm
-                  bg-white text-gray-800
-                  transition outline-none
-                  focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100
-                "
+                className="rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white text-gray-800 transition outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
               >
                 <option value="React">React</option>
                 <option value="JavaScript">JavaScript</option>
@@ -100,26 +95,21 @@ const AddInterviewTask = () => {
               </select>
             </div>
 
-            {/* Difficulty */}
+            {/* ✅ PRIORITY */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-gray-700">
-                Difficulty
+                Priority
               </label>
               <select
-                value={values.difficulty}
+                value={values.priority}
                 onChange={(e) =>
-                  setValues({ ...values, difficulty: e.target.value })
+                  setValues({ ...values, priority: e.target.value })
                 }
-                className="
-                  rounded-lg border border-gray-300 px-3 py-2 text-sm
-                  bg-white text-gray-800 capitalize
-                  transition outline-none
-                  focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100
-                "
+                className="rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white text-gray-800 capitalize transition outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
               >
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
+                <option value="low">Low 🟢</option>
+                <option value="medium">Medium 🟡</option>
+                <option value="high">High 🔴</option>
               </select>
             </div>
           </div>

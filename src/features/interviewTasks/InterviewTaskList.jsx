@@ -30,7 +30,7 @@ const InterviewTaskList = () => {
   const [selectedDate, setSelectedDate] = useState(getLocalDate());
   const [showWeeklySummary, setShowWeeklySummary] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all"); // ✅ NEW
+  const [filter, setFilter] = useState("all");
 
   // 🔹 Date Helpers
   const today = getLocalDate();
@@ -40,13 +40,16 @@ const InterviewTaskList = () => {
   const isPastDay = selectedDate < today;
 
   useEffect(() => {
-    setLoading(true); // ✅ reset loading when date changes
+    setLoading(true);
     const timer = setTimeout(() => {
       setLoading(false);
     }, 700);
 
     return () => clearTimeout(timer);
   }, [selectedDate]);
+
+  // 🔹 Priority Order
+  const priorityOrder = { high: 1, medium: 2, low: 3 };
 
   // 🔹 Derived Data (Memoized 🚀)
   const filteredTasks = useMemo(() => {
@@ -56,6 +59,11 @@ const InterviewTaskList = () => {
         if (filter === "completed") return t.status === "done";
         if (filter === "pending") return t.status !== "done";
         return true;
+      })
+      .sort((a, b) => {
+        const aPriority = a.priority || "medium";
+        const bPriority = b.priority || "medium";
+        return priorityOrder[aPriority] - priorityOrder[bPriority];
       });
   }, [interviewTasks, selectedDate, filter]);
 
@@ -110,6 +118,7 @@ const InterviewTaskList = () => {
 
   return (
     <div className="mt-6 space-y-10 max-w-4xl mx-auto px-4">
+
       {/* 🔷 Header Actions */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <TopActions
@@ -149,34 +158,38 @@ const InterviewTaskList = () => {
         </p>
       </div>
 
-      {/* 🔷 FILTER BUTTONS */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setFilter("all")}
-          className={`px-3 py-1 border rounded ${
-            filter === "all" ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          All
-        </button>
+      {/* 🔷 FILTER SECTION */}
+      <div>
+        <p className="text-sm text-gray-500 mb-2">Filter tasks</p>
 
-        <button
-          onClick={() => setFilter("completed")}
-          className={`px-3 py-1 border rounded ${
-            filter === "completed" ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          Completed
-        </button>
+        <div className="flex gap-2 mb-4">
+          <button
+            onClick={() => setFilter("all")}
+            className={`px-3 py-1 border rounded ${
+              filter === "all" ? "bg-blue-500 text-white" : ""
+            }`}
+          >
+            All
+          </button>
 
-        <button
-          onClick={() => setFilter("pending")}
-          className={`px-3 py-1 border rounded ${
-            filter === "pending" ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          Pending
-        </button>
+          <button
+            onClick={() => setFilter("completed")}
+            className={`px-3 py-1 border rounded ${
+              filter === "completed" ? "bg-blue-500 text-white" : ""
+            }`}
+          >
+            Completed
+          </button>
+
+          <button
+            onClick={() => setFilter("pending")}
+            className={`px-3 py-1 border rounded ${
+              filter === "pending" ? "bg-blue-500 text-white" : ""
+            }`}
+          >
+            Pending
+          </button>
+        </div>
       </div>
 
       {/* 🔷 Task List */}
